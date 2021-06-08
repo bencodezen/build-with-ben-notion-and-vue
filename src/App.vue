@@ -4,7 +4,14 @@
 </template>
 
 <script>
-export default {}
+export default {
+  async created() {
+    const response = await fetch('/.netlify/functions/notion')
+    const data = await response.json()
+
+    console.log({ data })
+  }
+}
 </script>
 
 <style>
