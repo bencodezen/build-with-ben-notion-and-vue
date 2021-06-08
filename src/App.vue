@@ -1,15 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
   <h1>Hello Twitch!</h1>
+  <h2>Results</h2>
+  <p v-if="!notionResponse">No results</p>
+  <ul v-else>
+    <li v-for="item in notionResponse.results" :key="item.id">
+      {{ item.properties.Name.title[0].plain_text }} ({{
+        item.properties.Tags.multi_select[0].name
+      }})
+    </li>
+  </ul>
+  <button @click="fetchNotionDatabase">
+    Fetch Notion Database
+  </button>
 </template>
 
 <script>
 export default {
-  async created() {
-    const response = await fetch('/.netlify/functions/notion')
-    const data = await response.json()
+  data: () => ({
+    notionResponse: ''
+  }),
+  methods: {
+    async fetchNotionDatabase() {
+      const response = await fetch('/.netlify/functions/notion')
+      const data = await response.json()
 
-    console.log({ data })
+      console.log({ data })
+
+      this.notionResponse = data
+    }
   }
 }
 </script>
